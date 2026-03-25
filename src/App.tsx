@@ -39,11 +39,13 @@ import {
   type FirstUseConversionCopyResponse,
   type FirstUseConversionNudgeResponse,
   type OnboardingExperienceResponse,
+  type PreferredOutput,
   type RecallSuggestionItem,
   type SelfStudyGuideResponse,
   type SessionResponse,
   clearStoredSessionId,
 } from './api/baltutor'
+import { ApiLabPanel } from './components/dev/ApiLabPanel'
 import { LandingPlaybookSections } from './components/ConversionPlaybookPanels'
 import { isActivationChecklistDismissed } from './components/growth/activationChecklistStorage'
 import { HomeActivationChecklist } from './components/growth/HomeActivationChecklist'
@@ -70,7 +72,7 @@ export default function App() {
   const [painPick, setPainPick] = useState<string | null>(null)
   const [classLevel, setClassLevel] = useState(8)
   const [board, setBoard] = useState('CBSE')
-  const [preferredOutput, setPreferredOutput] = useState('HINGLISH')
+  const [preferredOutput, setPreferredOutput] = useState<PreferredOutput>('HINGLISH')
 
   const [session, setSession] = useState<SessionResponse | null>(null)
   const [usage, setUsage] = useState<AiUsageSnapshotResponse | null>(null)
@@ -434,7 +436,7 @@ export default function App() {
                       labelId="lang-label"
                       label="Reply language"
                       value={preferredOutput}
-                      onChange={(e) => setPreferredOutput(e.target.value)}
+                      onChange={(e) => setPreferredOutput(e.target.value as PreferredOutput)}
                     >
                       <MenuItem value="EN">English</MenuItem>
                       <MenuItem value="HI">Hindi</MenuItem>
@@ -488,7 +490,7 @@ export default function App() {
                         <Typography variant="caption" color="text.secondary">
                           Language
                         </Typography>
-                        <Typography variant="body2">{session.preferredOutput}</Typography>
+                        <Typography variant="body2">{session.preferredOutput ?? '—'}</Typography>
                       </Stack>
                       <Stack spacing={0.5}>
                         <Typography variant="caption" color="text.secondary">
@@ -635,6 +637,12 @@ export default function App() {
                       ))}
                     </List>
                   )}
+                </CardContent>
+              </Card>
+
+              <Card variant="outlined">
+                <CardContent>
+                  <ApiLabPanel />
                 </CardContent>
               </Card>
 

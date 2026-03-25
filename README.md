@@ -31,6 +31,23 @@ This project lives in its own repository. Run it next to **baltutor-backend** (o
 
 The first response that includes **`X-Baltutor-Session`** stores a UUID in **`localStorage`** under **`baltutor_session_id`**. Use **Dev → New anonymous session** in the UI to clear it.
 
+## API client (`src/api/baltutor.ts`)
+
+Typed wrappers mirror the backend surface area:
+
+- **`/api/health`**
+- **Public:** `marketing-bundle`, `onboarding-experience`, `first-use-conversion`, `self-study`, `conversion-playbook`, `access-policy`
+- **Session:** `GET/PATCH /session`, `first-use-nudge`, `ai-usage-today`, `today`, `parent-summary` (nullable 404), `recall-suggestions`, `weak-topics`
+- **Chat:** threads CRUD-style + messages
+- **Quiz:** `start`, `submit`
+- **Homework:** multipart `upload`, `history`, question `learner-attempt` + `hint-step`
+- **Curriculum:** chapters by class + subject
+- **Feedback**, **Auth** (register / login / Google), **Analytics** events batch, **Support** bot + tickets, **Payments** (PhonePe / Paytm checkout — JWT required)
+
+Optional JWT is stored under **`baltutor_access_token`** and sent as **`Authorization: Bearer`**. The dashboard **Full API lab** accordion exercises these calls end-to-end.
+
+Server-only routes (webhooks, admin) are not included in the browser client by design.
+
 ## Production
 
 Point **`vite.config.ts`** `server.proxy` at your API host, or introduce **`VITE_API_BASE`** and resolve absolute URLs in **`src/api/baltutor.ts`**.
