@@ -1,5 +1,7 @@
 # Baltutor frontend (demo shell)
 
+**Repository:** [github.com/shubhamsenudz/baltutor-frontend](https://github.com/shubhamsenudz/baltutor-frontend)
+
 React + Vite + TypeScript + MUI UI for the Baltutor / Owli demo. It calls **`GET /api/v1/public/marketing-bundle`** (onboarding, self-study, playbook, first-use copy), **`/access-policy`**, and session endpoints. Includes conversion playbook surfaces, multi-step paywall, usage meters, nudge, recall, and growth-oriented landing/onboarding patterns.
 
 ## Repo layout
