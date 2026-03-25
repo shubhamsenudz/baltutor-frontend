@@ -32,13 +32,26 @@ export function clearAccessToken() {
   localStorage.removeItem(STORAGE_ACCESS)
 }
 
+/** Empty string in dev when using Vite proxy; set `VITE_API_BASE` for prod (no trailing slash). */
+function apiBase(): string {
+  const raw = import.meta.env.VITE_API_BASE
+  if (raw == null || String(raw).trim() === '') return ''
+  return String(raw).replace(/\/$/, '')
+}
+
+export function apiUrl(path: string): string {
+  if (path.startsWith('http://') || path.startsWith('https://')) return path
+  const base = apiBase()
+  return base ? `${base}${path.startsWith('/') ? path : `/${path}`}` : path
+}
+
 export async function baltutorFetch(path: string, init?: RequestInit): Promise<Response> {
   const headers = new Headers(init?.headers)
   const sid = getStoredSessionId()
   if (sid) headers.set(SESSION_HEADER, sid)
   const token = getAccessToken()
   if (token) headers.set('Authorization', `Bearer ${token}`)
-  const res = await fetch(path, { ...init, headers })
+  const res = await fetch(apiUrl(path), { ...init, headers })
   const issued = res.headers.get(SESSION_HEADER)
   if (issued) setStoredSessionId(issued)
   return res

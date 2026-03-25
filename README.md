@@ -25,7 +25,17 @@ This project lives in its own repository. Run it next to **baltutor-backend** (o
    npm run dev
    ```
 
-3. Open **`http://localhost:5173`**. The Vite dev server proxies **`/api`** → **`http://localhost:8080`**.
+3. Open **`http://localhost:5173`**. The Vite dev server proxies **`/api`** → **`http://localhost:8080`** (override with **`VITE_DEV_API_TARGET`** — copy [`.env.example`](.env.example) to `.env.development`).
+
+## Ports & CORS (aligned with baltutor-backend)
+
+| | Default |
+|--|---------|
+| Spring Boot API | **`http://localhost:8080`** (`server.port` / `SERVER_PORT`) |
+| Vite dev | **`http://localhost:5173`** (`VITE_DEV_PORT`) |
+| Vite preview | **`http://localhost:4173`** (`VITE_PREVIEW_PORT`) |
+
+Backend **`baltutor.cors`** allows those browser origins on **`/api/**`** so you can also set **`VITE_API_BASE=http://localhost:8080`** and call the API without the proxy. Add hosts (e.g. LAN IP) via backend **`BALTUTOR_CORS_ALLOWED_ORIGINS`**.
 
 ## Session header
 
@@ -50,7 +60,7 @@ Server-only routes (webhooks, admin) are not included in the browser client by d
 
 ## Production
 
-Point **`vite.config.ts`** `server.proxy` at your API host, or introduce **`VITE_API_BASE`** and resolve absolute URLs in **`src/api/baltutor.ts`**.
+Build static assets with **`VITE_API_BASE=https://your-api.example.com`** (no trailing slash). Requests then go cross-origin; ensure that origin is listed in the API’s CORS config (`BALTUTOR_CORS_ALLOWED_ORIGINS` or `baltutor.cors.allowed-origin-patterns`).
 
 Subscribe actions are **disabled placeholders**—wire them to Play Billing / App Store / your billing flow.
 
